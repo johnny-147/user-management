@@ -1,26 +1,20 @@
 const express = require('express');
-
 const morgan = require('morgan');
-const clientSession = require('client-sessions');
+const UserWithDb = require('./persistence/users');
+const Auth = require('./middleware/auth');
 const helmet = require('helmet');
-
-const {SESSION_SECRET} = require('./config');
 
 const app = express();
 
-app.get('/', (req, res) => res.sendStatus(200));
-app.get('/health', (req, res) => res.sendStatus(200));
-
 app.use(morgan('short'));
 app.use(express.json());
-app.use(
-    clientSession({
-        cookieName: 'session',
-        secret: SESSION_SECRET,
-        duration: 24 * 60 * 60 * 1000
-    })
-);
 app.use(helmet());
+
+app.get('/', (req, res) => res.sendStatus(200));
+app.get('/health', (req, res) => res.sendStatus(200));
+app.post('/api/users', UserWithDb.create);
+app.post('/api/users/login',UserWithDb.login);
+app.delete('/api/users/me', Auth.verifyToken, UserWithDb.delete);
 
 let server;
 module.exports = {
