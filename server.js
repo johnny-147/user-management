@@ -11,6 +11,8 @@ app.use(express.json());
 app.use(helmet());
 
 app.get('/', (req, res) => res.sendStatus(200));
+app.get('/api/users/get',UserWithDb.getUsers);
+app.get('/api/users/get/:tagId', UserWithDb.getUser);
 app.get('/health', (req, res) => res.sendStatus(200));
 app.post('/api/users', UserWithDb.create);
 app.post('/api/users/login',UserWithDb.login);
