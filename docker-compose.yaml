@@ -25,12 +25,8 @@ services:
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: db
 
-  nginx:
-    restart: always
-    build: ./nginx/
-    ports:
+  frontend_reactjs_yt:
+    build: ./ui
+    ports: 
       - "80:80"
-    volumes:
-      - /www/public
-    links:
-      - app:app
+      - "4012:9090"
